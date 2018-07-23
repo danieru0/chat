@@ -4,15 +4,25 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
         link(rel="stylesheet" href="/css/style.css")
         title chat
     body
         .container
+            .rooms
+                if allRooms
+                    each room in allRooms
+                        .rooms__room
+                            p.room__name #{room.name}
+                            a(href="/?name="+room.name, class="room__join") Join
             .chat
                 .chat__text#output
 
                 .chat__send
                     textarea(id="message", placeholder="Your message")
+            .add-room
+                a(href="/make", class="add__button")
+                    span.fa.fa-plus
     script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js")
     script.
         var username = !{JSON.stringify(username)};

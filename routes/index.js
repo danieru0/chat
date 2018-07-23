@@ -1,25 +1,66 @@
 const express = require('express');
 const router = express.Router();
-const GlobalMessage = require('../models/global');
+
+const Room = require('../models/room');
 
 router.get('/', (req, res) => {
     if (req.user) {
         if (Object.keys(req.query).length === 0) {
-            res.render('chat', {
-                username: req.user.username,
-                room: false
+            Room.find({}, (err, docs) => {
+                if (!err) {
+                    res.render('chat', {
+                        username: req.user.username,
+                        room: false,
+                        allRooms: docs
+                    });
+                }
             });
         } else {
             const roomQuery = req.query;
             const roomName = roomQuery.name;
-            res.render('chat', {
-                username: req.user.username,
-                room: roomName
+            Room.findOne({ name: roomName }, (err, result) => {
+                if (!err) {
+                    if (result) {
+                        Room.find({}, (err, docs) => {
+                            if (!err) {
+                                res.render('chat', {
+                                    username: req.user.username,
+                                    room: roomName,
+                                    allRooms: docs
+                                });
+                            }
+                        });
+                    } else {
+                        res.send('404');
+                    }
+                }
             });
         }
     } else {
         res.redirect('/login');
     }
+});
+
+router.get('/make', (req, res) => {
+    if (req.user) {
+        res.render('make');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+router.post('/make', (req, res) => {
+    let room = new Room();
+    room.name = req.body.name;
+    room.author = req.user.username;
+
+    room.save((err) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+    });
+    res.redirect('/');
 });
 
 module.exports = router;

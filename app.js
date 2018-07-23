@@ -46,13 +46,22 @@ const server = app.listen(8080, () => {
 const io = socket(server);
 
 const GlobalMessage = require('./models/global');
+const Room = require('./models/room');
 
 io.on('connection', (socket) => {
     socket.on('output', (data) => {
         if (data.room == false) {
             GlobalMessage.find({}, (err, docs) => {
                 if (!err) {
-                    io.sockets.emit('output', docs);
+                    socket.join(data.room);
+                    io.emit('output', docs);
+                }
+            });
+        } else {
+            Room.findOne({ name: data.room }, (err, docs) => {
+                if (!err) {
+                    socket.join(data.room);
+                    io.emit('output', docs.messages);
                 }
             });
         }
@@ -69,10 +78,32 @@ io.on('connection', (socket) => {
                     console.log(err);
                     return;
                 }
-                io.sockets.emit('output', {
-                    username: data.user,
-                    message: data.message
-                });
+            });
+            io.to(data.room).emit('output', {
+                username: data.user,
+                message: data.message
+            });
+        } else {
+            Room.findOne({ name: data.room }, (err, result) => {
+                if (!err) {
+                    if (result) {
+                        result.messages.push({
+                            username: data.user,
+                            message: data.message
+                        });
+                        result.save((err) => {
+                            if (err) {
+                                console.log(err);
+                                return;
+                            }
+                        });
+                        io.to(data.room).emit('output', {
+                            username: data.user,
+                            message: data.message,
+                            room: data.room
+                        });
+                    }
+                }
             });
         }
     });

@@ -9,7 +9,13 @@ if (socket !== undefined) {
                 socket.emit('chat', {
                     message: message.value,
                     user: username,
-                    room: false
+                    room: false 
+                });
+            } else {
+                socket.emit('chat', {
+                    message: message.value,
+                    user: username,
+                    room: room
                 });
             }
             message.value = '';
@@ -19,7 +25,7 @@ if (socket !== undefined) {
 
     socket.on('output', (data) => {
         if (data.length == undefined) {
-            output.innerHTML += `<p><strong> ${data.username}</strong>: ${data.message}`;
+            output.innerHTML += `<p><strong> ${data.username}</strong>: ${data.message}`; 
         } else {
             if (!output.innerHTML) {
                 for (let i = 0; i < data.length; i++) {
@@ -27,11 +33,15 @@ if (socket !== undefined) {
                 }
             }
         }
+        output.scrollTop = output.scrollHeight - output.clientHeight;
     });
-
     if (room == false) {
         socket.emit('output', {
             room: false
+        });
+    } else {
+        socket.emit('output', {
+            room: room
         });
     }
 }
