@@ -40,7 +40,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-mongoose.connect('mongodb://localhost:27017/chatapp', {useNewUrlParser: true});
+mongoose.connect('mongodb://elosik:Barbarakobuszewska123!@ds249311.mlab.com:49311/chatapp', {useNewUrlParser: true});
 
 const server = app.listen(8080, () => {
     console.log('Server started on port 8080');
