@@ -42,7 +42,7 @@ passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect('mongodb://elosik:Barbarakobuszewska123!@ds249311.mlab.com:49311/chatapp', {useNewUrlParser: true});
 
-const server = app.listen(8080, () => {
+const server = app.listen(process.env.PORT || 8080, () => {
     console.log('Server started on port 8080');
 });
 
