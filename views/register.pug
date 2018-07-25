@@ -7,8 +7,11 @@ html
         link(rel="stylesheet" href="/css/style.css")
         title chat register
     body
-        .container
+        .container.column
+            if failureMessage
+                p.error #{failureMessage}
             form.login-form(method="POST", action="/register")
                 input.login-form__input(name="username", type="text", placeholder="Your nick")
                 input.login-form__input(name="password" type="password" placeholder="Your password")
-                input.login-form__btn(type="submit", value="Sign in")
+                input.login-form__btn(type="submit", value="Sign up")
+                a(href="/login", class="login-form__sign") Already registered?

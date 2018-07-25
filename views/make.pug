@@ -7,7 +7,9 @@ html
         link(rel="stylesheet" href="/css/style.css")
         title chat make
     body
-        .container
+        .container.column
+            if (errors && errors.name)
+                p.error #{errors.name.msg}
             form.login-form(method="POST", action="/make")
                 input.login-form__input(name="name", type="text", placeholder="Room name")
                 input.login-form__btn(type="submit", value="Make")

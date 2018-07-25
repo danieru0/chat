@@ -15,6 +15,10 @@ html {
     background-color: #3f3f3f;
 }
 
+.error {
+    color: #ffffff;
+}
+
 .login-form {
     width: 400px;
     height: 250px;
@@ -50,9 +54,16 @@ html {
     margin-top: 30px;
 }
 
+.login-form__sign {
+    text-decoration: none;
+    color: #6e6e6e;
+    margin-top: 10px;
+}
+
 .rooms {
     width: 200px;
     height: 600px;
+    max-height: 100%;
     background-color: #040404;
     border-right: 3px solid #6e6e6e;
     box-shadow: 0px 0px 15px black;
@@ -86,6 +97,7 @@ html {
 .chat {
     width: 600px;
     height: 600px;
+    max-height: 100%;
     background-color: #040404;
     display: flex;
     flex-direction: column;
@@ -131,11 +143,41 @@ html {
 
 .add-room {
     height: 600px;
+    max-height: 100%;
     margin-left: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .add-room a {
     text-decoration: none;
     color: #e46a6b;
     font-size: 30px;
+}
+
+#add__remove {
+    background-color: transparent;
+    border: none;
+    color: #e46a6b;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+}
+
+.forzerofor {
+    font-size: 100px;
+    color: #e46a6b;
+    margin: 0;
+}
+
+.forzeroforpara {
+    font-size: 16px;
+    color: #6e6e6e;
+    margin: 0;
+    margin-top: -10px;
+}
+
+.container.column {
+    flex-direction: column;
 }

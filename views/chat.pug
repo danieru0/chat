@@ -10,6 +10,9 @@ html(lang="en")
     body
         .container
             .rooms
+                .rooms__room
+                    p.room__name Global chat
+                    a(href="/", class="room__join") Join
                 if allRooms
                     each room in allRooms
                         .rooms__room
@@ -17,12 +20,15 @@ html(lang="en")
                             a(href="/?name="+room.name, class="room__join") Join
             .chat
                 .chat__text#output
-
                 .chat__send
                     textarea(id="message", placeholder="Your message")
             .add-room
                 a(href="/make", class="add__button")
                     span.fa.fa-plus
+                if clickedRoom
+                    if (clickedRoom.author == username)
+                        button#add__remove
+                            span.fa.fa-trash
     script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js")
     script.
         var username = !{JSON.stringify(username)};

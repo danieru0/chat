@@ -7,8 +7,11 @@ html
         link(rel="stylesheet" href="/css/style.css")
         title chat login
     body
-        .container
+        .container.column
+            if failureMessage.length
+                p.error #{failureMessage}
             form.login-form(method="POST", action="login")
                 input.login-form__input(name="username", type="text", placeholder="Your nick")
                 input.login-form__input(name="password" type="password" placeholder="Your password")
                 input.login-form__btn(type="submit", value="Sign in")
+                a(href="/register", class="login-form__sign") Don't have account?

@@ -3,6 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const flash = require('connect-flash');
+const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -23,6 +25,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,6 +52,24 @@ const GlobalMessage = require('./models/global');
 const Room = require('./models/room');
 
 io.on('connection', (socket) => {
+    socket.on('remove', (data) => {
+        Room.findOne({ name: data.room }, (err, docs) => {
+            if (!err) {
+                if (docs) {
+                    if (docs.author == data.user) {
+                        Room.deleteOne({ name: data.room }, (err) => {
+                            if (!err) {
+                                io.emit('remove');
+                            }
+                        });
+                    }
+                } else {
+                    return;
+                }
+            }
+        });
+    });
+
     socket.on('output', (data) => {
         if (data.room == false) {
             GlobalMessage.find({}, (err, docs) => {
@@ -57,7 +78,7 @@ io.on('connection', (socket) => {
                     io.emit('output', docs);
                 }
             });
-        } else {
+        } else { 
             Room.findOne({ name: data.room }, (err, docs) => {
                 if (!err) {
                     socket.join(data.room);

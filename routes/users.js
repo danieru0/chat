@@ -4,13 +4,21 @@ const passport = require('passport');
 const User = require('../models/users');
 
 router.get('/register', (req, res) => {
-    res.render('register');
+    if (req.user) {
+        res.redirect('/');
+    } else {
+        res.render('register');
+    }
 });
 
 router.post('/register', (req, res) => {
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
-        if (err) return res.render('register');
-        
+        if (err) {
+            return res.render('register', {
+                failureMessage: err.message
+            });
+        }
+
         passport.authenticate('local')(req, res, () => {
             res.redirect('/');
         });
@@ -18,10 +26,16 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-    res.render('login');
+    if (req.user) {
+        res.redirect('/');
+    } else {
+        res.render('login', {
+            failureMessage: req.flash('error')
+        });
+    }
 });
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
+router.post('/login', passport.authenticate('local', {failureFlash: { type: 'error', message: 'Invalid username or password' }, failureRedirect: '/login'}), (req, res) => {
     res.redirect('/');
 });
 
