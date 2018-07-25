@@ -52,7 +52,7 @@ router.get('/make', (req, res) => {
 });
 
 router.post('/make', [
-    check('name').matches(/\w/mg).withMessage("Don't use special characters")
+    check('name').matches(/^([0-9A-z\ \_]+)$/, 'g').isLength({ max: 24 }).withMessage("Max room name: 24, don't use special characters")
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

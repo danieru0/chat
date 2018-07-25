@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
                     if (docs.author == data.user) {
                         Room.deleteOne({ name: data.room }, (err) => {
                             if (!err) {
-                                io.emit('remove');
+                                io.to(data.room).emit('remove');
                             }
                         });
                     }
@@ -75,14 +75,14 @@ io.on('connection', (socket) => {
             GlobalMessage.find({}, (err, docs) => {
                 if (!err) {
                     socket.join(data.room);
-                    io.emit('output', docs);
+                    io.to(data.room).emit('output', docs);
                 }
             });
         } else { 
             Room.findOne({ name: data.room }, (err, docs) => {
                 if (!err) {
                     socket.join(data.room);
-                    io.emit('output', docs.messages);
+                    io.to(data.room).emit('output', docs.messages);
                 }
             });
         }
@@ -128,4 +128,8 @@ io.on('connection', (socket) => {
             });
         }
     });
+});
+
+app.get('*', (req, res) => {
+    res.render('404');
 });

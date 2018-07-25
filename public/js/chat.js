@@ -2,8 +2,18 @@
     const socket = io.connect('http://localhost:8080/');
     const message = document.getElementById('message'),
           output = document.getElementById('output'),
-          remove = document.getElementById('add__remove');
-    
+          remove = document.getElementById('settings__remove-button'),
+          hamburger = document.getElementById('hamburger'),
+          rooms = document.getElementById('rooms');
+
+    hamburger.addEventListener('click', (req, res) => {
+        if (rooms.classList.contains('active')) {
+            rooms.classList.remove('active');
+        } else {
+            rooms.classList.add('active');
+        }
+    });
+
     if (socket !== undefined) {
         message.addEventListener('keydown', (e) => {
             if (e.which === 13 && e.shiftKey == false) {
@@ -27,11 +37,19 @@
     
         socket.on('output', (data) => {
             if (data.length == undefined) {
-                output.innerHTML += `<p><strong> ${data.username}</strong>: ${data.message}`; 
+                if (data.username == username) {
+                    output.innerHTML += `<p class="me"><strong> ${data.username}</strong>: ${data.message}`; 
+                } else {
+                    output.innerHTML += `<p><strong> ${data.username}</strong>: ${data.message}`; 
+                }
             } else {
                 if (!output.innerHTML) {
                     for (let i = 0; i < data.length; i++) {
-                        output.innerHTML += `<p><strong> ${data[i].username}</strong>: ${data[i].message}`;
+                        if (data[i].username == username) {
+                            output.innerHTML += `<p class="me"><strong> ${data[i].username}</strong>: ${data[i].message}`;
+                        } else {
+                            output.innerHTML += `<p><strong> ${data[i].username}</strong>: ${data[i].message}`;
+                        }
                     }
                 }
             }

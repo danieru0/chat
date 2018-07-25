@@ -5,11 +5,12 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         link(rel="stylesheet" href="/css/style.css")
         title chat
     body
         .container
-            .rooms
+            .rooms#rooms
                 .rooms__room
                     p.room__name Global chat
                     a(href="/", class="room__join") Join
@@ -21,14 +22,20 @@ html(lang="en")
             .chat
                 .chat__text#output
                 .chat__send
-                    textarea(id="message", placeholder="Your message")
-            .add-room
-                a(href="/make", class="add__button")
+                    textarea(id="message", placeholder= username+": Your message")
+            .settings
+                button.settings__hamburger#hamburger
+                    span.fa.fa-bars
+                a(href="/make", class="settings__add-button")
                     span.fa.fa-plus
                 if clickedRoom
                     if (clickedRoom.author == username)
-                        button#add__remove
+                        button#settings__remove-button
                             span.fa.fa-trash
+                form(method="POST", action="/logout")
+                    button.settings__logout-button
+                        span.fa.fa-sign-out
+                    //input.settings__logout-button(type="submit")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js")
     script.
         var username = !{JSON.stringify(username)};
