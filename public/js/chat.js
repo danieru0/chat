@@ -1,5 +1,5 @@
 (function () {
-    const socket = io.connect('http://localhost:8080/');
+    const socket = io.connect('https://salty-temple-59777.herokuapp.com/');
     const message = document.getElementById('message'),
           output = document.getElementById('output'),
           remove = document.getElementById('settings__remove-button'),
