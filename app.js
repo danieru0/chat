@@ -40,7 +40,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-mongoose.connect('mongodb://elosik:Barbarakobuszewska123!@ds249311.mlab.com:49311/chatapp', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/chatapp', {useNewUrlParser: true});
 
 const server = app.listen(process.env.PORT || 8080, () => {
     console.log('Server started on port 8080');
@@ -52,24 +52,6 @@ const GlobalMessage = require('./models/global');
 const Room = require('./models/room');
 
 io.on('connection', (socket) => {
-    socket.on('remove', (data) => {
-        Room.findOne({ name: data.room }, (err, docs) => {
-            if (!err) {
-                if (docs) {
-                    if (docs.author == data.user) {
-                        Room.deleteOne({ name: data.room }, (err) => {
-                            if (!err) {
-                                io.to(data.room).emit('remove');
-                            }
-                        });
-                    }
-                } else {
-                    return;
-                }
-            }
-        });
-    });
-
     socket.on('output', (data) => {
         if (data.room == false) {
             GlobalMessage.find({}, (err, docs) => {

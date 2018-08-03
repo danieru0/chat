@@ -73,4 +73,20 @@ router.post('/make', [
     res.redirect('/');
 });
 
+router.post('/delete', (req, res) => {
+    Room.findOne({ name: req.body.room }, (err, docs) => {
+        if (!err) {
+            if (docs) {
+                if (docs.author == req.body.user) {
+                    Room.deleteOne({ name: req.body.room }, (err) => {
+                        if (!err) {
+                            res.redirect('/');
+                        }
+                    });
+                }
+            }
+        }
+    });
+});
+
 module.exports = router;

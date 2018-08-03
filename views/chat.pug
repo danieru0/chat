@@ -30,8 +30,11 @@ html(lang="en")
                     span.fa.fa-plus
                 if clickedRoom
                     if (clickedRoom.author == username)
-                        button#settings__remove-button
-                            span.fa.fa-trash
+                        form.delete-form(method="POST", action="delete")
+                            input(type="hidden", name="user", value=username)
+                            input(type="hidden", name="room", value=room)
+                            button#settings__remove-button
+                                span.fa.fa-trash
                 form(method="POST", action="/logout")
                     button.settings__logout-button
                         span.fa.fa-sign-out

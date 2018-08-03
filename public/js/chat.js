@@ -1,8 +1,7 @@
 (function () {
-    const socket = io.connect('https://salty-temple-59777.herokuapp.com/');
+    const socket = io.connect('http://localhost:8080/');
     const message = document.getElementById('message'),
           output = document.getElementById('output'),
-          remove = document.getElementById('settings__remove-button'),
           hamburger = document.getElementById('hamburger'),
           rooms = document.getElementById('rooms');
 
@@ -64,17 +63,5 @@
                 room: room
             });
         }
-        if (remove) {
-            remove.addEventListener('click', () => {
-                socket.emit('remove', {
-                    room: room,
-                    user: username
-                });
-            });
-        }
-    
-        socket.on('remove', () => {
-            document.location.href = "/";
-        });
     }
 })();
